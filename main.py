@@ -1,87 +1,56 @@
 """
 Jawad Taj
-2021-11-13
-Calculate the area of a circle given its radius
-Calculate the distance between 2 points on a cartesian plane
+2021-11-14
+Tell you if you should take a deal or not in the game show "Deal or No Deal"
 """
 
 
-class Circle:
+class DealOrNoDeal:
     """
-        :param rad: The radius of the circle
+        :param numbers: List of number picked from the game
     """
-
-    def __init__(self, rad):
-        self.pi = 3.14
-        self.rad = rad
-
-    """
-        :radius_to_area: Gets the area of a Circle with a radius
-    
-        :return: area of the circle
-    """
-
-    def radius_to_area(self):
-        return self.pi * self.rad ** 2
-
-
-class CartesianPlane:
-    """
-        :param x1: Point Value of x1
-        :param x2: Point Value of x2
-        :param y1: Point Value of y1
-        :param y2: Point Value of y2
-    """
-
-    def __init__(self, x1, x2, y1, y2):
-        self.x1 = x1
-        self.x2 = x2
-        self.y1 = y1
-        self.y2 = y2
+    def __init__(self, numbers):
+        self.briefcases = {1: 100, 2: 500, 3: 1000, 4: 5000, 5: 10000,
+                           6: 25000, 7: 50000, 8: 100000, 9: 500000, 10: 1000000}
+        self.numbers = numbers
 
     """
-        :distance_2_points: Gets the distance of 2 points
-
-        :return: distance of two points
+        :take_offer: Removes the picked briefcases
+        
+        :return: Average of briefcases value
     """
+    def take_offer(self):
+        # Remove the numbers taken
+        for x in self.numbers:
+            self.briefcases.pop(x)
 
-    def distance_2_points(self):
-        return ((self.x2 - self.x1) ** 2 + (self.y2 - self.y1) ** 2) ** 0.5
+        return sum(self.briefcases.values()) / len(self.briefcases)
 
 
 if __name__ == '__main__':
-    # Circle
-    print("Circle")
-    radius = ""
+    numbers = []
+    user_number = ""
+    offer = ""
+    # Keeps use in loop till number is 0
+    while user_number != 0:
+        user_number = ""
+        # Checks if user enter a number
+        while not user_number.isdigit():
+            user_number = input("Enter The Number That Are Picked From 1-10: ")
 
-    # Checks if user enter numbers
-    while not radius.isdigit():
-        radius = input("Enter The Radius Of The Circle: ")
+        user_number = int(user_number)
+        # Check If Number In Is Range
+        if 0 < user_number < 11:
+            numbers.append(user_number)
 
-    radius = int(radius)
-    c = Circle(rad=radius)
-    print(c.radius_to_area())
+    # Checks if user enter a number
+    while not offer.isdigit():
+        offer = input("Enter The Banks Offer: ")
 
-
-    # Cartesian Plane
-    print("\nCartesian Plane")
-    x1, x2, y1, y2 = "", "", "", ""
-
-    # Keeps in loop until all variables are 0
-    while x1 + x2 + y1 + y2 != 0.0:
-        x1, x2, y1, y2 = "", "", "", ""
-
-        # Checks if user enter numbers
-        while not x1.isdigit() or not x2.isdigit() or \
-                not y1.isdigit() or not y2.isdigit():
-            x1 = input("Enter The Number For x1: ")
-            x2 = input("Enter The Number For x2: ")
-            y1 = input("Enter The Number For y1: ")
-            y2 = input("Enter The Number For y2: ")
-
-        x1 = int(x1)
-        x2 = int(x2)
-        y1 = int(y1)
-        y2 = int(y2)
-        cp = CartesianPlane(x1, x2, y1, y2)
-        print(cp.distance_2_points(), "\n")
+    offer = int(offer)
+    dd = DealOrNoDeal(numbers)
+    money = dd.take_offer()
+    if money < offer:
+        print("You Should Take The Deal, %s Is On The Line" % "{:,.2f}".format(money))
+    else:
+        print(F"You Should Not Take The Deal.")
